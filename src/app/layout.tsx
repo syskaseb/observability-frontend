@@ -1,22 +1,17 @@
-"use client";
+import { ReactNode } from 'react';
+import ReduxProvider from './providers/ReduxProvider';
+import './globals.css';
 
-import { Provider } from "react-redux";
-import { store } from "@/store";
-import React from "react";
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="en-GB">
-      <head>
-        <title>Observability Frontend</title>
-      </head>
-      <body>
-        <Provider store={store}>{children}</Provider>
-      </body>
-    </html>
-  );
+export default function RootLayout({ children }: { children: ReactNode }) {
+    return (
+        <html lang="en">
+        <head>
+            <title>Observability Frontend</title>
+            <meta name="description" content="Manage and review applicants in our dashboard" />
+        </head>
+        <body>
+        <ReduxProvider>{children}</ReduxProvider>
+        </body>
+        </html>
+    );
 }

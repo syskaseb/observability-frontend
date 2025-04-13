@@ -1,29 +1,29 @@
 // src/api-client/customApplicantClient.ts
-import {OpenAPI} from "./core/OpenAPI";
-import {request as __request} from "./core/request";
-import type {PagedModelEntityModelApplicantResponseDto} from "./models/PagedModelEntityModelApplicantResponseDto";
+import { OpenAPI } from "./core/OpenAPI";
+import { request as __request } from "./core/request";
+import type { PagedModelEntityModelApplicantResponseDto } from "./models/PagedModelEntityModelApplicantResponseDto";
 
 /**
- * Custom wrapper to fetch applicants with flat query parameters.
+ * Retrieve multiple applicants with flat query parameters.
+ *
+ * This function builds a flat query string (instead of the default recursive one)
+ * to match the expectations of your Java backend API.
+ *
  * @param page Zero-based page index.
  * @param size Number of items per page.
- * @param sort Array of sort criteria.
+ * @param sort Optional array of sort criteria, e.g. ['name,asc'].
  * @returns A promise resolving to the applicants response.
  */
 export function getApplicantsFlat(
-  page: number,
-  size: number,
-  sort: string[] = [],
+    page: number,
+    size: number,
+    sort: string[] = []
 ): Promise<PagedModelEntityModelApplicantResponseDto> {
-  // Build a flat query string.
-  // This avoids the default recursive behavior (which creates nested keys).
-  const sortQuery = sort
-    .map((item) => `sort=${encodeURIComponent(item)}`)
-    .join("&");
+  // Create a flat query string for the sort criteria.
+  const sortQuery = sort.map(item => `sort=${encodeURIComponent(item)}`).join("&");
   const qs = `?page=${page}&size=${size}${sortQuery ? "&" + sortQuery : ""}`;
 
-  // Use the __request helper with the flat URL.
-  // Here we override the default query builder by appending our qs string.
+  // Make the API call using the generated request function.
   return __request(OpenAPI, {
     method: "GET",
     url: `/applicants${qs}`,
